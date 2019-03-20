@@ -20,5 +20,3 @@ def ifeellucky():
 
 
 ifeellucky()
-
-np.var
