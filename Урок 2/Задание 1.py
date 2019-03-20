@@ -1,8 +1,9 @@
 import numpy as np
 
+
 def ifeellucky():
     result = np.random.uniform(0, 1)  # от 0 включая до 1 не включая
-    monte = int(result * 37) # округляет вниз, 37 не может быть
+    monte = int(result * 37)  # округляет вниз, 37 не может быть
 
     if monte < 1:
         print(f'Выпало {monte} Зеро')
@@ -19,3 +20,5 @@ def ifeellucky():
 
 
 ifeellucky()
+
+np.var
