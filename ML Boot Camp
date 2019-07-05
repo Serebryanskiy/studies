@@ -1,0 +1,36 @@
+%matplotlib inline
+%config InlineBackend.figure_format = 'retina'
+import pandas as pd
+import matplotlib.pyplot as plt
+
+#Minmax
+
+min_g = train.groupby('itemId').min().reset_index()[['itemId', 'Xmin', 'Ymin']]
+max_g = train.groupby('itemId').max().reset_index()[['itemId', 'Xmax', 'Ymax']]
+predict_df = pd.merge(min_g, max_g, on='itemId')
+predict_df.sort_values(by=['itemId']).to_csv('predictions.csv', index=None, header=None)
+
+#Draw boxes
+def draw_boxes(df,i, annotate=False):
+    
+    item_ids = df.sort_values(by=['itemId'])['itemId'].unique()
+    rows = df.loc[df['itemId'] == item_ids[i]].copy()
+    display(rows)
+
+    my_plot = plt.gca()
+    for i, row in rows.iterrows():      
+        r = row
+        rec = Rectangle((r['Xmin'], r['Ymin']), r['Xmax'] - r['Xmin'] , r['Ymax'] - r['Ymin'], fill=False,color="blue", alpha=1)
+        my_plot.add_patch(rec)
+        if annotate:
+            plt.text(r['Xmin'], r['Ymax'],str(i),fontsize=10, color='black')
+    
+    r = rows.iloc[0]
+    my_plot.add_patch(Rectangle((r['Xmin_true'], r['Ymin_true']), r['Xmax_true'] - r['Xmin_true'] , r['Ymax_true'] - r['Ymin_true'],\
+                                fill=False, color="red", alpha=0.5))
+
+    plt.axis('equal')
+    plt.show()
+
+for i in range(0,20):
+    draw_boxes(df,i)
