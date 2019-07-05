@@ -3,6 +3,11 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
+#Init
+train = pd.read_csv("train_data.csv")
+test = pd.read_csv("test_data.csv")
+answers = pd.read_csv("train_answers.csv")
+
 #Minmax
 
 min_g = train.groupby('itemId').min().reset_index()[['itemId', 'Xmin', 'Ymin']]
@@ -11,11 +16,10 @@ predict_df = pd.merge(min_g, max_g, on='itemId')
 predict_df.sort_values(by=['itemId']).to_csv('predictions.csv', index=None, header=None)
 
 #Draw boxes
-def draw_boxes(df,i, annotate=False):
-    
+def draw_rectangle(df,i, annotate=False):
+    df = pd.merge(df,answers,on='itemId')
     item_ids = df.sort_values(by=['itemId'])['itemId'].unique()
     rows = df.loc[df['itemId'] == item_ids[i]].copy()
-    display(rows)
 
     my_plot = plt.gca()
     for i, row in rows.iterrows():      
@@ -33,4 +37,4 @@ def draw_boxes(df,i, annotate=False):
     plt.show()
 
 for i in range(0,20):
-    draw_boxes(df,i, annotate=True)
+    draw_rectangle(df,i)
