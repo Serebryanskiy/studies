@@ -33,4 +33,4 @@ def draw_boxes(df,i, annotate=False):
     plt.show()
 
 for i in range(0,20):
-    draw_boxes(df,i)
+    draw_boxes(df,i, annotate=True)
